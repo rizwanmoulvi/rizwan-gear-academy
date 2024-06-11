@@ -1,7 +1,18 @@
-use gstd::{prelude::*, msg, exec, ActorId};
-use gmeta::{In, InOut, Out};
-use parity_scale_codec::{Encode, Decode};
-use scale_info::TypeInfo;
+#![no_std]
+
+use gmeta::{In, InOut, Out, Metadata};
+use gstd::prelude::*;
+
+pub struct PebblesMetadata;
+
+impl Metadata for PebblesMetadata {
+    type Init = In<PebblesInit>;
+    type Handle = InOut<PebblesAction, PebblesEvent>;
+    type State = Out<GameState>;
+    type Reply = ();
+    type Others = ();
+    type Signal = ();
+}
 
 #[derive(Debug, Default, Clone, Encode, Decode, TypeInfo)]
 pub struct PebblesInit {
@@ -49,15 +60,4 @@ pub struct GameState {
     pub difficulty: DifficultyLevel,
     pub first_player: Player,
     pub winner: Option<Player>,
-}
-
-pub struct PebblesMetadata;
-
-impl Metadata for PebblesMetadata {
-    type Init = In<PebblesInit>;
-    type Handle = InOut<PebblesAction, PebblesEvent>;
-    type State = Out<GameState>;
-    type Reply = ();
-    type Others = ();
-    type Signal = ();
 }
